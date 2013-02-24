@@ -3,8 +3,8 @@ package com.bossomeness.everything.in.one.plugin.commandhandler.commands;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import com.bossomeness.everything.in.one.plugin.Everything;
 import com.bossomeness.everything.in.one.plugin.Permissions;
+import com.bossomeness.everything.in.one.plugin.api.ConfigVariables;
 
 public class Burn {
 	
@@ -17,7 +17,7 @@ public class Burn {
 		
 		if (player.hasPermission(new Permissions().burn)) {
 			
-			int burntime = Everything.defaultburntime * 20;
+			int burntime = ConfigVariables.defaultburntime * 20;
 			player.setFireTicks(burntime);
 			player.sendMessage(ChatColor.DARK_RED + "You burnt yourself!");			
 			
@@ -42,7 +42,7 @@ public class Burn {
 		if (player.hasPermission(new Permissions().burnOther)) {
 			
 			Player playerTarget = player.getServer().getPlayer(arg);
-			int burntime = Everything.defaultburntime * 20;
+			int burntime = ConfigVariables.defaultburntime * 20;
 			playerTarget.setFireTicks(burntime);
 			playerTarget.sendMessage(ChatColor.DARK_RED + "You have been set on fire!");
 			player.sendMessage(ChatColor.DARK_RED + "You have burnt " + playerTarget.getName() + "!");			

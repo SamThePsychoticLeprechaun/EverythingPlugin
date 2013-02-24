@@ -5,8 +5,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-import com.bossomeness.everything.in.one.plugin.Everything;
 import com.bossomeness.everything.in.one.plugin.Permissions;
+import com.bossomeness.everything.in.one.plugin.api.ConfigVariables;
 
 public class Fire {
 
@@ -14,8 +14,8 @@ public class Fire {
 		
 		if (player.hasPermission(new Permissions().fire)) {
 			
-			int firetime = Everything.defaultfiretime * 20;
-			int firesize = (Everything.defaultfiresize + 1) / 2;
+			int firetime = ConfigVariables.defaultfiretime * 20;
+			int firesize = (ConfigVariables.defaultfiresize + 1) / 2;
 			
 			Location loc = new Location(null, 0, 0, 0);
 			player.getLocation(loc);
@@ -60,8 +60,8 @@ public class Fire {
 		if (player.hasPermission(new Permissions().fireOther)) {
 			
 			Player playerTarget = player.getServer().getPlayer(arg);
-			int firetime = Everything.defaultfiretime * 20;
-			double firesize = (double) Math.floor((Everything.defaultfiresize + 1) / 2);
+			int firetime = ConfigVariables.defaultfiretime * 20;
+			double firesize = (double) Math.floor((ConfigVariables.defaultfiresize + 1) / 2);
 			
 			Location loc = new Location(null, 0, 0, 0);
 			playerTarget.getLocation(loc);
@@ -108,7 +108,7 @@ public class Fire {
 			if (player.hasPermission(new Permissions().fire)) {
 			
 			int firetime = Integer.parseInt(arg2) * 20;
-			double firesize = (double) Math.floor((Everything.defaultfiresize + 1) / 2);
+			double firesize = (double) Math.floor((ConfigVariables.defaultfiresize + 1) / 2);
 			
 			Location loc = new Location(null, 0, 0, 0);
 			player.getLocation(loc);
@@ -146,8 +146,8 @@ public class Fire {
 			
 			if (player.hasPermission(new Permissions().fireOther)) {
 				
-				int firetime = Everything.defaultfiretime * 20;
-				double firesize = (double) Math.floor((Everything.defaultfiresize + 1) / 2);
+				int firetime = ConfigVariables.defaultfiretime * 20;
+				double firesize = (double) Math.floor((ConfigVariables.defaultfiresize + 1) / 2);
 				
 				Location loc = new Location(null, 0, 0, 0);
 				playerTarget.getLocation(loc);
@@ -234,8 +234,8 @@ public class Fire {
 			
 			if (player.hasPermission(new Permissions().fireOther)) {
 				
-				int firetime = Everything.defaultfiretime * 20;
-				double firesize = (double) Math.floor((Everything.defaultfiresize + 1) / 2);
+				int firetime = ConfigVariables.defaultfiretime * 20;
+				double firesize = (double) Math.floor((ConfigVariables.defaultfiresize + 1) / 2);
 				
 				Location loc = new Location(null, 0, 0, 0);
 				playerTarget.getLocation(loc);
