@@ -1,13 +1,23 @@
 package com.bossomeness.everything.in.one.plugin;
 
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.bossomeness.everything.in.one.plugin.commandhandler.CommandHandler;
+
 public class Everything extends JavaPlugin {
+	
+	protected static File configFile;
+	
+	public static int defaultburntime;
+	public static int defaultfiretime;
+	public static int defaultfiresize;
 
 	@Override
 	public void onEnable() {
@@ -15,7 +25,65 @@ public class Everything extends JavaPlugin {
 		/**
 		 * adds permissions when the server starts up
 		 */
+		pm.addPermission(new Permissions().heal);
+		pm.addPermission(new Permissions().healOther);
+		pm.addPermission(new Permissions().burn);
+		pm.addPermission(new Permissions().burnOther);
 		pm.addPermission(new Permissions().fire);
+		pm.addPermission(new Permissions().fireOther);
+		
+		/**
+		 * redirects commands to the command handler
+		 */
+		getCommand("everything").setExecutor(new CommandHandler());
+		getCommand("ev").setExecutor(new CommandHandler());
+		
+		/**
+		 * creates the config file if not already in data folder and loads thereafter	
+		 */
+		configFile = new File(getDataFolder(), "config.yml");
+		
+		if(configFile.exists()) {
+			try {
+	        getConfig().load(configFile);
+	        getLogger().info("Config file successfully loaded.");
+				} catch (FileNotFoundException e) {
+				getLogger().info("Error while loading config!");
+	            e.printStackTrace();
+	        	} catch (IOException e) {
+	            getLogger().info("Error while loading config!");
+	            e.printStackTrace();
+	        	} catch (InvalidConfigurationException e) {
+	            getLogger().info("Error while loading config!");
+	            e.printStackTrace();
+	        	}	
+			} else {
+				getLogger().info("Creating Config File!");
+				this.saveDefaultConfig();
+				try {
+				    getConfig().load(configFile);
+				    getLogger().info("Config file successfully loaded.");
+					} catch (FileNotFoundException e) {
+					getLogger().info("Error while loading config!");
+				    e.printStackTrace();
+				    } catch (IOException e) {
+				    getLogger().info("Error while loading config!");
+				    e.printStackTrace();
+				    } catch (InvalidConfigurationException e) {
+				    getLogger().info("Error while loading config!");
+				    e.printStackTrace();
+				    }
+			}
+		
+		/**
+		 * gets all values from the config file
+		 */
+		FileConfiguration config = getConfig();
+		
+		Everything.defaultburntime = config.getInt("defaultburntime");
+		Everything.defaultfiretime = config.getInt("defaultfiretime");
+		Everything.defaultfiresize = config.getInt("defaultfiresize");
+		
 	}
 
 	@Override
@@ -23,69 +91,12 @@ public class Everything extends JavaPlugin {
 		/**
 		 * This section disables the permissions
 		 */
-		getServer().getPluginManager().removePermission(
-				new Permissions().heal);
-		getServer().getPluginManager().removePermission(
-				new Permissions().fire);
-	}
-
-	@Override
-	public boolean onCommand(CommandSender sender, Command command,
-			String commandLabel, String[] args) {
-		Player player = (Player) sender;
-		if (commandLabel.equalsIgnoreCase("heal")) {
-			if (args.length == 0) {
-				if (sender.hasPermission(new Permissions().heal)) {
-					player.setHealth(20);
-					player.setFoodLevel(20);
-					player.setRemainingAir(20);
-					player.setFireTicks(0);
-					player.sendMessage(ChatColor.AQUA + "Healed!");
-				} else {
-					sender.sendMessage(ChatColor.RED
-							+ "You do not have permission to perform this command!");
-				}
-			} else if (args.length == 1) {
-				if (player.getServer().getPlayer(args[0]) != null) {
-					if (sender.hasPermission(new Permissions().heal)) {
-						Player targetPlayer = player.getServer().getPlayer(
-								args[0]);
-						targetPlayer.setHealth(20);
-						targetPlayer.setFoodLevel(20);
-						targetPlayer.setRemainingAir(20);
-						targetPlayer.setFireTicks(0);
-						targetPlayer.sendMessage(ChatColor.AQUA
-								+ "You have just been healed!");
-					} else {
-						sender.sendMessage(ChatColor.RED
-								+ "You do not have permission to perform this command!");
-					}
-				} else {
-					player.sendMessage(ChatColor.RED + "Player Not Found!");
-				}
-			} else if (commandLabel.equalsIgnoreCase("fire")) {
-				if (args.length == 0) {
-					if (sender.hasPermission(new Permissions().fire)) {
-						player.setFireTicks(Integer.parseInt(args[1]));
-						player.sendMessage(ChatColor.DARK_RED + "You have been set on fire!");
-					}
-				}if (player.getServer().getPlayer(args[0]) != null) {
-					if (sender.hasPermission(new Permissions().heal)) {
-						Player targetPlayer = player.getServer().getPlayer(
-								args[0]);
-						targetPlayer.setFireTicks(Integer.parseInt(args[1]));
-						targetPlayer.sendMessage(ChatColor.DARK_RED
-								+ "You have been set on fire!");
-					} else {
-						sender.sendMessage(ChatColor.RED
-								+ "You do not have permission to perform this command!");
-					}
-				} else {
-					player.sendMessage(ChatColor.RED + "Player Not Found!");
-				}
-			}
-		}
-		return false;
+		getServer().getPluginManager().removePermission(new Permissions().heal);
+		getServer().getPluginManager().removePermission(new Permissions().healOther);
+		getServer().getPluginManager().removePermission(new Permissions().burn);
+		getServer().getPluginManager().removePermission(new Permissions().burnOther);
+		getServer().getPluginManager().removePermission(new Permissions().fire);
+		getServer().getPluginManager().removePermission(new Permissions().fireOther);
 	}
 
 }
